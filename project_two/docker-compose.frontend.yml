@@ -14,4 +14,4 @@ services:
 
 networks:
   clms_network:
-    external: true
+    driver: bridge

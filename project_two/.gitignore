@@ -1,0 +1,61 @@
+# Laravel / PHP
+vendor/
+node_modules/
+/public/storage
+/storage/*.key
+.env
+.env.*
+.phpunit.result.cache
+Homestead.yaml
+Homestead.json
+/.idea
+/.vscode
+/.phpunit.cache
+
+# Laravel specific logs/cache
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Node.js (frontend)
+front-end/node_modules
+front-end/.next
+front-end/out
+front-end/build
+front-end/.env
+front-end/.env.development.local
+front-end/.env.test.local
+front-end/.env.production.local
+
+
+# Node.js (backend)
+back-end/node_modules
+back-end/.next
+back-end/dockerfiles/
+back-end/vendor
+back-end/.env
+back-end/.env.development.local
+back-end/.env.test.local
+back-end/.env.production.local
+
+# Docker
+*.pid
+*.log
+docker-compose.override.yml
+
+
+#
+composer.lock
+composer.json
+package.json
+package-lock.json
+
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: clms_frontend
+    env_file: .env
+    volumes:
+      - ./front-end:/app
+    command: sh -c "npm run dev"
+    networks:
+      - clms_network
+
+
+networks:
+  clms_network:
+    external: true

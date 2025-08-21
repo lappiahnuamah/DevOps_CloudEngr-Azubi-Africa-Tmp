@@ -1,0 +1,125 @@
+# name: CI/CD Pipeline for Next.js
+
+# on:
+#   push:
+#     branches: [ "main" ]
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Source Code
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18.x'
+
+#       - name: Install Dependencies
+#         run: npm ci 
+
+#       - name: Build Next.js App
+#         run: npm run build
+
+#       - name: Docker Login
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.PAT_TOKEN }}
+
+#       - name: Docker Build and Push
+#         id: build-push
+#         uses: docker/build-push-action@v3
+#         with:
+#           context: .
+#           file: ./Dockerfile
+#           push: true
+#           tags: |
+#             ghcr.io/<YOUR_USERNAME>/<YOUR_DOCKER_IMAGE_NAME>:${{ github.sha }}
+#             ghcr.io/<YOUR_USERNAME>/<YOUR_DOCKER_IMAGE_NAME>:latest
+
+
+name: CI/CD Pipeline for Next.js & Laravel
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # ==========================
+      # FRONTEND (Next.js)
+      # ==========================
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install Dependencies (Frontend)
+        run: |
+          cd front-end
+          npm ci 
+
+      - name: Build Next.js App
+        run: |
+          cd front-end
+          npm run build
+
+      # ==========================
+      # BACKEND (Laravel)
+      # ==========================
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, bcmath, curl, intl, gd
+
+      - name: Install Dependencies (Backend)
+        run: |
+          cd back-end
+          composer install --no-dev --prefer-dist --optimize-autoloader
+
+      - name: Generate Laravel App Key
+        run: |
+          cd back-end
+          php artisan key:generate --force
+
+      # ==========================
+      # Docker Build & Push
+      # ==========================
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+
+      - name: Build & Push Frontend Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front-end
+          file: ./front-end/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/<YOUR_USERNAME>/frontend:latest
+            ghcr.io/<YOUR_USERNAME>/frontend:${{ github.sha }}
+
+      - name: Build & Push Backend Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./back-end
+          file: ./back-end/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/<YOUR_USERNAME>/backend:latest
+            ghcr.io/<YOUR_USERNAME>/backend:${{ github.sha }}
+

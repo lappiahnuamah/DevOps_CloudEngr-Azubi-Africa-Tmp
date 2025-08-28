@@ -5,13 +5,15 @@ services:
       dockerfile: Dockerfile
     container_name: clms_frontend
     env_file: .env
+    ports:
+      - "3000:3000"
     volumes:
       - ./front-end:/app
-    command: sh -c "npm run dev"
+    command: sh -c "NODE_ENV=development npm run dev"
     networks:
       - clms_network
 
 
 networks:
   clms_network:
-    driver: bridge
+    external: true

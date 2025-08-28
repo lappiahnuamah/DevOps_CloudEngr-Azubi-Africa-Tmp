@@ -54,8 +54,11 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
+
+RUN php artisan key:generate
 
 # Expose Laravel port
 EXPOSE 8000

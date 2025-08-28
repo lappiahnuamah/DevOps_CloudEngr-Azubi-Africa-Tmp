@@ -20,7 +20,7 @@ Route::post('password/reset', [PasswordResetController::class, 'resetPassword'])
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get("user", [AuthenticationController::class, "getUser"]); // <-- add this
+    // Route::get("user", [AuthenticationController::class, "getUser"]); // <-- add this
 
     Route::patch("users/{user}/change-password", [AuthenticationController::class, "changePassword"]);
     Route::patch("users/{user}", [UserController::class, "update"]);

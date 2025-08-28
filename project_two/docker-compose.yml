@@ -1,0 +1,65 @@
+services:
+  backend:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: clms_backend
+    env_file: .env
+    depends_on:
+      - mysql
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back-end:/var/www/html
+    command: sh -c "php artisan serve --host=0.0.0.0 --port=8000"
+    networks:
+      - clms-network
+
+
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: clms_frontend
+    # env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./front-end:/app
+    command: sh -c "NODE_ENV=development npm run dev"
+    environment: 
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PRIVATE_BACKEND_HOST=http://clms_backend:8000
+      - NODE_ENV=development
+    networks:
+      - clms-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    # env_file: .env
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=project_two
+      # - MYSQL_USER=root
+      - MYSQL_PASSWORD=admin
+    networks:
+      - clms-network
+
+volumes:
+  mysql_data:
+    name: mysql_data
+  # redis_data:
+  #   name: redis_data
+
+networks:
+  clms-network:
+    name: clms-network 
+    driver: bridge

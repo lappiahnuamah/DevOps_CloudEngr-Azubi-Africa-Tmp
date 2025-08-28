@@ -13,16 +13,17 @@ export default function UsersIndex({users}) {
     const [query, setQuery] = useState("");
     const [activeRecord, setActiveRecord] = useState(null);
 
+    // Add this to get the API base URL
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
     useEffect(() => {
         fetchData();
-
-
     }, []);
-
 
     const deleteDatum = async (datum) => {
         try {
-            const response = await axios.delete(`${config.backendUrl}/admin/users/${datum.id}`, {
+            // Fix: Use full backend URL
+            const response = await axios.delete(`${API_BASE_URL}/api/admin/users/${datum.id}`, {
                 headers: {...config.authHeader}
             });
 
@@ -36,6 +37,7 @@ export default function UsersIndex({users}) {
             errorAlert("Oops!", "Something went wrong!");
         }
     }
+
     const initDeletion = async () => {
         const confirmed = await sweetConfirm("Delete this item?", "You won't be able to undo this!");
 
@@ -44,21 +46,20 @@ export default function UsersIndex({users}) {
         } else {
             console.log("Action canceled");
         }
-
     }
 
     const fetchData = async () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.get(`${config.backendUrl}/admin/users`, {
+            // Fix: Use full backend URL
+            const response = await axios.get(`${API_BASE_URL}/api/admin/users`, {
                 headers: {...config.authHeader}
             });
 
             if (response.status === 200) {
                 // filter out job-seeker role
                 let data = response.data.data;
-
                 setData(data);
             }
 
@@ -73,7 +74,6 @@ export default function UsersIndex({users}) {
     if (isLoading) {
         return <Loader loading={isLoading}/>;
     }
-
 
     return (
         <div className="grid grid-cols-3 gap-10">
@@ -109,7 +109,6 @@ export default function UsersIndex({users}) {
                         })
                     }
                 </div>
-
             </div>
             <div className="col-span-2">
                 <UserView datum={activeRecord} deleteCb={initDeletion}/>

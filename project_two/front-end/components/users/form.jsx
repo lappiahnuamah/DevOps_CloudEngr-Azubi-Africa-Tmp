@@ -8,6 +8,7 @@ import {errorAlert, successAlert} from "@/lib/alerts";
 
 export default function Form(props) {
     const config = useContext(AppContext);
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -72,7 +73,7 @@ export default function Form(props) {
     }
 
     const processStore = async (formData) => {
-        const response = await axios.post(`${config.backendUrl}/admin/users`, formData, {
+        const response = await axios.post(`${API_BASE_URL}/api/admin/users`, formData, {
             headers: {...config.authHeader, ...{'Content-Type': 'multipart/form-data'}}
         });
 
@@ -83,7 +84,7 @@ export default function Form(props) {
     }
 
     const processUpdate = async (formData) => {
-        const response = await axios.patch(`${config.backendUrl}/users/${props.initData.id}`, formData, {
+        const response = await axios.patch(`${API_BASE_URL}/api/admin/users/${props.initData.id}`, formData, {
             headers: {...config.authHeader,}
         });
 

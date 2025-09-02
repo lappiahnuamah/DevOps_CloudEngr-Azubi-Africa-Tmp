@@ -32,6 +32,7 @@ jobs:
       - name: Install Dependencies (Frontend)
         run: |
           cd project_two/front-end
+          npm install --package-lock-only
           npm ci 
 
       - name: Build Next.js App

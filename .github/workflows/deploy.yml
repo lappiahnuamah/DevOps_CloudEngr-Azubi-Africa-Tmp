@@ -19,6 +19,14 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
+      - name: Clean up duplicate lock files
+        run: |
+          # Remove root package-lock.json if it exists
+          if [ -f "project_two/package-lock.json" ]; then
+            rm project_two/package-lock.json
+            echo "Removed duplicate package-lock.json from root"
+          fi
+
       # ==========================
       # FRONTEND (Next.js)
       # ==========================
@@ -32,12 +40,16 @@ jobs:
       - name: Install Dependencies (Frontend)
         run: |
           cd project_two/front-end
-          npm install --package-lock-only
-          npm ci 
+          npm ci
 
       - name: Build Next.js App
         run: |
           cd project_two/front-end
+          # Set required environment variables for build
+          export SESSION_SECRET="github-actions-build-secret-key-minimum-32-characters-long-for-security"
+          export NEXT_PUBLIC_API_URL="http://localhost:8000"
+          export NEXT_PRIVATE_BACKEND_HOST="http://clms_backend:8000"
+          export NODE_ENV="production"
           npm run build
 
       # ==========================
@@ -46,14 +58,14 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, pdo, bcmath, curl, intl, gd, zip
+          php-version: '8.3'
+          extensions: mbstring, pdo, pdo_mysql, bcmath, curl, intl, gd, zip
 
       - name: Cache Composer packages
         uses: actions/cache@v3
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          path: project_two/back-end/vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('project_two/back-end/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
 
@@ -61,6 +73,14 @@ jobs:
         run: |
           cd project_two/back-end
           composer install --no-dev --prefer-dist --optimize-autoloader
+
+      - name: Generate Laravel App Key (if needed)
+        run: |
+          cd project_two/back-end
+          if [ ! -f .env ]; then
+            cp .env.example .env
+          fi
+          php artisan key:generate --force
 
       # ==========================
       # Docker Setup
@@ -80,8 +100,8 @@ jobs:
       - name: Build & Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: project_two/front-end
-          file: project_two/front-end/Dockerfile
+          context: ./project_two/front-end
+          file: ./project_two/front-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -89,12 +109,16 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            SESSION_SECRET=github-actions-build-secret-key-minimum-32-characters-long-for-security
+            NEXT_PUBLIC_API_URL=http://localhost:8000
+            NEXT_PRIVATE_BACKEND_HOST=http://clms_backend:8000
 
       - name: Build & Push Backend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: project_two/back-end
-          file: project_two/back-end/Dockerfile
+          context: ./project_two/back-end
+          file: ./project_two/back-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -112,4 +136,8 @@ jobs:
           echo "📦 Frontend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:latest"
           echo "📦 Backend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:latest"
           echo "🔖 Commit SHA: ${{ github.sha }}"
-
+          echo ""
+          echo "🔧 Environment Variables Used:"
+          echo "   SESSION_SECRET: [SECURE - 32+ characters]"
+          echo "   NEXT_PUBLIC_API_URL: http://localhost:8000"
+          echo "   NEXT_PRIVATE_BACKEND_HOST: http://clms_backend:8000"

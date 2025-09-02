@@ -31,12 +31,12 @@ jobs:
 
       - name: Install Dependencies (Frontend)
         run: |
-          cd front-end
+          cd project_two/front-end
           npm ci 
 
       - name: Build Next.js App
         run: |
-          cd front-end
+          cd project_two/front-end
           npm run build
 
       # ==========================
@@ -58,7 +58,7 @@ jobs:
 
       - name: Install Dependencies (Backend)
         run: |
-          cd back-end
+          cd project_two/back-end
           composer install --no-dev --prefer-dist --optimize-autoloader
 
       # ==========================
@@ -79,7 +79,7 @@ jobs:
       - name: Build & Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./front-end
+          context: project_two/front-end
           file: project_two/front-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
@@ -92,7 +92,7 @@ jobs:
       - name: Build & Push Backend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./back-end
+          context: project_two/back-end
           file: project_two/back-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true

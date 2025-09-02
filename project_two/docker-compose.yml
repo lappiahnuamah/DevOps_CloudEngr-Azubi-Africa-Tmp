@@ -28,11 +28,14 @@ services:
       - backend
     volumes:
       - ./front-end:/app
+      - /app/node_modules
     command: sh -c "NODE_ENV=development npm run dev"
     environment: 
       - NEXT_PUBLIC_API_URL=http://localhost:8000
       - NEXT_PRIVATE_BACKEND_HOST=http://clms_backend:8000
       - NODE_ENV=development
+      # - WATCHPACK_POLLING=true
+      # - CHOKIDAR_USEPOLLING=true
     networks:
       - clms-network
 
@@ -52,6 +55,35 @@ services:
       - MYSQL_PASSWORD=admin
     networks:
       - clms-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - clms-network
+
+  
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: clms_nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - backend
+  #     - frontend
+  #   networks:
+  #     - clms-network
+
 
 volumes:
   mysql_data:

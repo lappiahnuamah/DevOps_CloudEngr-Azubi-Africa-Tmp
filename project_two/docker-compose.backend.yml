@@ -42,17 +42,17 @@ services:
       - clms_network
 
   
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: clms_nginx
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx:/etc/nginx/:ro
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - clms_network
+  nginx:
+    image: nginx:latest
+    container_name: clms_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/:ro
+    depends_on:
+      - backend
+    networks:
+      - clms_network
 
 volumes:
   db_data:

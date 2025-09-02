@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-          cache-dependency-path: './front-end/package-lock.json'
+          cache-dependency-path: '.project_two/front-end/package-lock.json'
 
       - name: Install Dependencies (Frontend)
         run: |
@@ -80,7 +80,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./front-end
-          file: ./front-end/Dockerfile
+          file: ./project_two/front-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -93,7 +93,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./back-end
-          file: ./back-end/Dockerfile
+          file: ./project_two/back-end/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |

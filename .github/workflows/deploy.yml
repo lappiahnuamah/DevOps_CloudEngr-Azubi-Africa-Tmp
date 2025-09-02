@@ -33,7 +33,7 @@ jobs:
         run: |
           cd project_two/front-end
           npm install --package-lock-only
-          npm ci
+          sh -c "NODE_ENV=development npm run dev"
 
       - name: Build Next.js App
         env:

@@ -71,7 +71,7 @@ jobs:
         run: |
           cd project_two/back-end
           if [ ! -f .env ]; then
-            cp .env.example .env
+            cp project_two/back-end/.env.example .env
           fi
           php artisan key:generate --force
 

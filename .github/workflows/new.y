@@ -77,7 +77,6 @@ jobs:
       - name: Prepare Laravel Environment
         run: |
           cd project_two/back-end
-          # Check if .env exists, if not create a minimal one
           if [ ! -f .env ]; then
             if [ -f .env.example ]; then
               cp .env.example .env
@@ -85,36 +84,32 @@ jobs:
             else
               echo "Creating minimal .env file for Laravel"
               cat > .env << EOF
-          APP_NAME=Laravel
-          APP_ENV=production
-          APP_KEY=
-          APP_DEBUG=false
-          APP_URL=http://localhost:8000
-          
-          LOG_CHANNEL=stack
-          LOG_DEPRECATIONS_CHANNEL=null
-          LOG_LEVEL=error
-          
-          DB_CONNECTION=mysql
-          DB_HOST=127.0.0.1
-          DB_PORT=3306
-          DB_DATABASE=laravel
-          DB_USERNAME=root
-          DB_PASSWORD=
-          
-          CACHE_DRIVER=file
-          FILESYSTEM_DISK=local
-          QUEUE_CONNECTION=sync
-          SESSION_DRIVER=file
-          SESSION_LIFETIME=120
-          EOF
+APP_NAME=Laravel
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_URL=http://localhost:8000
+
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=error
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+CACHE_DRIVER=file
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+EOF
             fi
           fi
-          
-          # Generate app key
           php artisan key:generate --force
-          
-          # Show the generated key (first 20 chars only for security)
           echo "Laravel app key generated: $(grep APP_KEY .env | cut -c1-20)..."
 
       # ==========================
@@ -162,17 +157,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-          
       # ==========================
       # Deployment Summary
       # ==========================
       - name: Image Deployment Summary
         run: |
           echo "🚀 Images successfully built and pushed to Docker Hub!"
-          echo "📦 Frontend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:latest"
-          echo "📦 Backend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:latest"
+          echo "📦 Frontend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:v${{ github.run_number }}"
+          echo "📦 Backend Image: ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:v${{ github.run_number }}"
           echo "🔖 Commit SHA: ${{ github.sha }}"
           echo "🔧 SESSION_SECRET: [CONFIGURED]"
-
-
-

@@ -54,7 +54,6 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
-COPY .env.example .env.example
 
 # Ensure .env exists (copy from .env.example if missing)
 RUN if [ ! -f .env ]; then cp .env.example .env; fi

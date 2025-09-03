@@ -76,7 +76,7 @@
 
 pipeline {
     agent any
-
+    
     environment {
         IMAGE_NAME   = "clms-backend"
         TAG          = "v${BUILD_NUMBER}"

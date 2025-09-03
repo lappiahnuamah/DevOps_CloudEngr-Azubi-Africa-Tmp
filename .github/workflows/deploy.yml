@@ -2,9 +2,9 @@ name: CI/CD Pipeline - Build and Deploy to Docker Hub
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "mainy", "mastery" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "mainy", "mastery" ]
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -195,7 +195,7 @@ jobs:
           docker tag ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:latest ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_BACKEND_REPO }}:latest
           docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_BACKEND_REPO }}:v${{ github.run_number }}
           docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_BACKEND_REPO }}:latest
-          
+
       # ==========================
       # Deployment Summary
       # ==========================

@@ -94,9 +94,9 @@ pipeline {
             steps {
                 dir('project_two/back-end') {
                     script {
-                        sh """
-                        docker build -t $IMAGE_NAME:$TAG .
-                        docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:$LATEST_TAG
+                        bat """
+                        docker build -t %IMAGE_NAME%:%TAG% .
+                        docker tag %IMAGE_NAME%:%TAG% %IMAGE_NAME%:%LATEST_TAG%
                         """
                     }
                 }
@@ -112,6 +112,21 @@ pipeline {
                     echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
                     docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$TAG
                     docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$LATEST_TAG
+                    docker logout
+                    """
+                }
+            }
+        }
+        
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_TOKEN')]) {
+                    bat """
+                    docker tag %IMAGE_NAME%:%TAG% %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%TAG%
+                    docker tag %IMAGE_NAME%:%LATEST_TAG% %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%LATEST_TAG%
+                    echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
+                    docker push %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%TAG%
+                    docker push %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%LATEST_TAG%
                     docker logout
                     """
                 }

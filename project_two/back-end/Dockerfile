@@ -54,6 +54,8 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
+# Ensure .env exists (copy from .env.example if missing)
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader

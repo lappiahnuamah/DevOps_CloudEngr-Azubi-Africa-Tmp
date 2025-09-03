@@ -78,7 +78,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME   = "clms-backend"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-id')
+        IMAGE_NAME   = "clms-backend-jenkins"
         TAG          = "v${BUILD_NUMBER}"
         LATEST_TAG   = "latest"
     }
@@ -103,7 +104,6 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_TOKEN')]) {
                     bat """
                     docker tag %IMAGE_NAME%:%TAG% %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%TAG%
                     docker tag %IMAGE_NAME%:%LATEST_TAG% %DOCKERHUB_USERNAME%/%IMAGE_NAME%:%LATEST_TAG%

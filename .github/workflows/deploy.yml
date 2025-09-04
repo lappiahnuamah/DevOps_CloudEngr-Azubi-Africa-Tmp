@@ -2,9 +2,9 @@ name: CI/CD Pipeline - Build and Deploy to Docker Hub
 
 on:
   push:
-    branches: [ "mainy", "mastery" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "mainy", "mastery" ]
+    branches: [ "main", "master" ]
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

@@ -1,8 +1,9 @@
 services:
   backend:
-    build:
-      context: ./back-end
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./back-end
+    #   dockerfile: Dockerfile
+    image: lappiahnuamah/clms-backend:v17
     container_name: clms_backend
     env_file: .env
     depends_on:
@@ -17,9 +18,10 @@ services:
 
 
   frontend:
-    build:
-      context: ./front-end
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./front-end
+    #   dockerfile: Dockerfile
+    image: lappiahnuamah/clms-frontend:v17
     container_name: clms_frontend
     # env_file: .env
     ports:

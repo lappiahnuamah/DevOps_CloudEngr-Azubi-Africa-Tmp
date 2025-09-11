@@ -32,7 +32,7 @@ jobs:
     - name: Frontend Tests
       run: |
         cd project_two/front-end
-        npm ci
+        npm ci --prefer-offline --no-audit --progress=false --loglevel=error
         npm test
 
     - name: Set up PHP

@@ -24,15 +24,16 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
-        cache-dependency-path: |
-            project_two/front-end/package-lock.json
-            project_two/front-end/package.json
+        cache-dependency-path: 'project_two/front-end/package-lock.json'
+           
 
 
     - name: Frontend Tests
+      working-directory: ./project_two/front-end
       run: |
-        cd project_two/front-end
-        npm ci --prefer-offline --no-audit --progress=false --loglevel=error
+        # Update package-lock.json if needed
+        npm install
+        # Run tests
         npm test
 
     - name: Set up PHP

@@ -31,7 +31,7 @@ jobs:
 
     - name: Frontend Tests
       run: |
-        cd front-end
+        cd project_two/front-end
         npm ci
         npm test
 
@@ -43,7 +43,7 @@ jobs:
 
     - name: Backend Tests
       run: |
-        cd back-end
+        cd project_two/back-end
         composer install
         php artisan test
 
@@ -65,7 +65,7 @@ jobs:
     - name: Build and push Frontend
       uses: docker/build-push-action@v5
       with:
-        context: ./front-end
+        context: ./project_two/front-end
         push: true
         tags: |
           ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:staging
@@ -74,7 +74,7 @@ jobs:
     - name: Build and push Backend
       uses: docker/build-push-action@v5
       with:
-        context: ./back-end
+        context: ./project_two/back-end
         push: true
         tags: |
           ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:staging

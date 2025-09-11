@@ -39,12 +39,15 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
-        extensions: mbstring, pdo, bcmath
+        extensions: mbstring, pdo, bcmath, zip, gd
+        tools: composer:v2
 
     - name: Backend Tests
+      working-directory: ./project_two/back-end
       run: |
-        cd project_two/back-end
-        composer install
+        composer install --no-interaction --prefer-dist
+        cp .env.example .env
+        php artisan key:generate
         php artisan test
 
   build-and-push:

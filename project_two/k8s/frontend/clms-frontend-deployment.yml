@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clms-frontend
+  namespace: dev
+  labels:
+    app: clms-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: clms-frontend
+  template:
+    metadata:
+      labels:
+        app: clms-frontend
+    spec:
+      containers:
+      - name: clms-frontend
+        image: lappiahnuamah/clms-frontend:v17
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NEXT_PUBLIC_API_URL
+          value: "http://localhost:30801"  # For browser access
+        - name: NEXT_PRIVATE_BACKEND_HOST
+          value: "http://clms-backend-service:8000"  # For internal service communication
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"

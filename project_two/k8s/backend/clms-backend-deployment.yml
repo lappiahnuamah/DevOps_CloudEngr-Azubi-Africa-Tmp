@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: clms-backend
+  namespace: dev
   labels:
     app: clms-backend
 spec:
@@ -14,11 +15,34 @@ spec:
       labels:
         app: clms-backend
     spec:
+      initContainers:
+      - name: check-db-ready
+        image: mysql:8.0
+        command: ['sh', '-c', 'until mysql -h mysql -u root -padmin -e "SELECT 1"; do echo waiting for mysql; sleep 2; done']
       containers:
       - name: clms-backend
-        image: ${DOCKERHUB_USERNAME}/clms-backend:latest
+        image: lappiahnuamah/clms-backend:v17
         ports:
         - containerPort: 8000
+        env:
+        - name: DB_CONNECTION
+          value: "mysql"
+        - name: DB_HOST
+          value: "mysql"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: MYSQL_DATABASE
+        - name: DB_USERNAME
+          value: "root"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: MYSQL_ROOT_PASSWORD
         resources:
           limits:
             cpu: "500m"
@@ -32,9 +56,3 @@ spec:
             port: 8000
           initialDelaySeconds: 15
           periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 20

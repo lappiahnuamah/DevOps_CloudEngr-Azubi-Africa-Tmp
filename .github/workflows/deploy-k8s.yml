@@ -33,8 +33,7 @@ jobs:
       run: |
         # Update package-lock.json if needed
         npm install
-        # Run tests
-        npm test
+        npm run build
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2

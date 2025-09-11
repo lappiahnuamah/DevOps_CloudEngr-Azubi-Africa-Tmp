@@ -24,7 +24,10 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
-        cache-dependency-path: './front-end/package-lock.json'
+        cache-dependency-path: |
+            project_two/front-end/package-lock.json
+            project_two/front-end/package.json
+
 
     - name: Frontend Tests
       run: |

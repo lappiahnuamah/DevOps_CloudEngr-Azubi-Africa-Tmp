@@ -49,7 +49,10 @@ jobs:
         composer install --no-interaction --prefer-dist
         cp .env.example .env
         php artisan key:generate
-        php artisan test
+        # Create test directories if they don't exist
+        mkdir -p tests/Unit tests/Feature
+        # Run tests with detailed output
+        php artisan test --verbose
 
   build-and-push:
     needs: test

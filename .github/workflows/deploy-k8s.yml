@@ -38,9 +38,10 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
-        extensions: mbstring, pdo, bcmath, zip, gd
+        php-version: '8.3'
+        extensions: mbstring, pdo, bcmath, zip, gd, fileinfo
         tools: composer:v2
+        coverage: none
 
     - name: Backend Tests
       working-directory: ./project_two/back-end

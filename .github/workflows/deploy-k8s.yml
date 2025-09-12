@@ -51,8 +51,9 @@ jobs:
         php artisan key:generate
         # Create test directories if they don't exist
         mkdir -p tests/Unit tests/Feature
-        # Run tests with detailed output
-        php artisan test --verbose
+        
+        # Run tests with proper PHPUnit configuration
+        ./vendor/bin/phpunit --testdox
 
   build-and-push:
     needs: test

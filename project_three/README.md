@@ -76,7 +76,7 @@ The repository follows a simple, organized layout:
 ---
 - Click on Launch Instance.
 ---
-![EC2 Search](../project_three/images/1.PNG)
+![EC2 Search](../project_three/images/11.PNG)
 ---
 - Enter the name of your web server
 ---

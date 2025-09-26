@@ -27,7 +27,19 @@ The goal was to design a **security-first, fault-tolerant file upload system** w
 ![Architecture](A_flowchart_diagram_depicts_a_secure,_monitored_fi.png)
 
 ---
+## 📂 Project Structure
 
+The repository follows a simple, organized layout:
+
+- **`app.py`** → Main Flask application
+- **`static/upload.js`** → Handles chunking, presigned URLs, progress tracking
+- **`templates/index.html`** → Simple UI to test uploads
+- **`.env`** → Holds `AWS_REGION`, `BUCKET_NAME`, `KMS_KEY_ID` (excluded from git)
+- **`logs/`** → For application logs if needed
+
+---
+
+---
 ## 3️⃣ Role-Based Access Control (RBAC)
 
 | Role      | Allowed Actions |
@@ -52,4 +64,44 @@ Uploader IAM Policy Example:
     }
   ]
 }
+```
 
+Viewer IAM Policy Example:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::my-secure-uploads-klawbucket/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["kms:Decrypt"],
+      "Resource": "arn:aws:kms:us-east-2:<ACCOUNT_ID>:key/<KMS_KEY_ID>"
+    }
+  ]
+}
+
+```
+## 4️⃣ Flask Backend Code
+app.py:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::my-secure-uploads-klawbucket/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["kms:Decrypt"],
+      "Resource": "arn:aws:kms:us-east-2:<ACCOUNT_ID>:key/<KMS_KEY_ID>"
+    }
+  ]
+}
+
+```

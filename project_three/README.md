@@ -118,7 +118,7 @@ The repository follows a simple, organized layout:
 ---
 - Now, copy the public IP Address of your instance
 ---
-![ec2-success](../project_three/images/2.PNG)
+![ec2-success](../project_three/images/2aa.PNG)
 ---
 - Another way to retrieve your IP Address is to use this command
 ```bash

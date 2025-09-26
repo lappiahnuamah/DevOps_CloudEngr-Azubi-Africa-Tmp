@@ -426,7 +426,33 @@ aws cloudwatch put-metric-alarm \
   --evaluation-periods 1 \
   --alarm-actions arn:aws:sns:us-east-2:067717894834:S3UploadAlerts
 
-
 ```
+### 🔧 Troubleshooting
 
+| Issue                                      | Fix                                                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `IllegalLocationConstraintException`       | Use `--create-bucket-configuration LocationConstraint=us-east-2` when creating bucket |
+| `KMS.NotFoundException`                    | Check your `KMS_KEY_ID` ARN in `.env`                                                 |
+| `AccessDenied` on upload                   | Update IAM policy & KMS key policy to allow `kms:GenerateDataKey`                     |
+| CORS error in browser                      | Add S3 CORS config allowing `PUT, GET, POST`                                          |
+| `externally-managed-environment` pip error | Use virtualenv: `python3 -m venv venv && source venv/bin/activate`                    |
 
+### ✅ Benefits
+
+- Security-first: SSE-KMS, IAM least-privilege, CloudTrail logs.
+- Scalable: 5TB+ uploads supported via multipart upload.
+- Resilient: Resume support prevents re-uploading entire file.
+- Observable: CloudWatch alarms + SNS notify on failure.
+- User-friendly: Progress bar + retries improve UX
+---
+- Here's how the solution looks like
+---
+- Image of while the file is uploading
+![diagram](../project_three/images/1.png)
+---
+- Image of the Uploaded file
+![diagram](../project_three/images/2.png)
+---
+- Image of the s3 logs
+![diagram](../project_three/images/7.png)
+---

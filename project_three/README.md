@@ -450,9 +450,15 @@ aws cloudwatch put-metric-alarm \
 - Image of while the file is uploading
 ![diagram](../project_three/images/1.PNG)
 ---
-- Image of the Uploaded file
+- Image of the progress bar showing the Upload was successful
 ![diagram](../project_three/images/2.PNG)
+---
+- Image of the uploaded file
+![diagram](../project_three/images/7b.PNG)
 ---
 - Image of the s3 logs
 ![diagram](../project_three/images/7.PNG)
+---
+- Image of the CloudWatch Logs stored in the s3
+![diagram](../project_three/images/7c.PNG)
 ---

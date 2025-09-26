@@ -68,7 +68,7 @@ The repository follows a simple, organized layout:
 ### Step 1: Launch an EC2 Instance
 - Log into the AWS Management Console to setup the EC2 Instance.
 ---
-![EC2-Dashboard](../project_three/images/a.PNG)
+![EC2-Dashboard](../project_three/images/11.PNG)
 ---
 - Search for **EC2  on the search bar**.
 ---

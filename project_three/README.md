@@ -448,11 +448,11 @@ aws cloudwatch put-metric-alarm \
 - Here's how the solution looks like
 ---
 - Image of while the file is uploading
-![diagram](../project_three/images/1.png)
+![diagram](../project_three/images/1.PNG)
 ---
 - Image of the Uploaded file
-![diagram](../project_three/images/2.png)
+![diagram](../project_three/images/2.PNG)
 ---
 - Image of the s3 logs
-![diagram](../project_three/images/7.png)
+![diagram](../project_three/images/7.PNG)
 ---

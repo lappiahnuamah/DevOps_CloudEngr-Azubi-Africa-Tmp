@@ -293,7 +293,7 @@ def complete():
 
 ```
 ## 5️⃣ Frontend Code
-`static/upload.js`
+Place your `upload.js` in `static/` and create a simple HTML file to load it.
 ```python
 export async function uploadFile(file, key, onProgress) {
   const init = await fetch("/initiate", {
@@ -362,6 +362,39 @@ export async function uploadFile(file, key, onProgress) {
 }
 
 ```
+---
+A simple HTML file to load it.
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Multipart Uploader</title>
+</head>
+<body>
+  <h1>Upload a File</h1>
+  <input type="file" id="fileInput">
+  <progress id="progress" value="0" max="100"></progress>
+
+  <script type="module">
+    import { uploadFile } from "./static/upload.js";
+
+    const fileInput = document.getElementById("fileInput");
+    const progress = document.getElementById("progress");
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files[0];
+      await uploadFile(file, `uploads/${file.name}`, (percent) => {
+        progress.value = percent;
+      });
+      alert("Upload complete!");
+    });
+  </script>
+</body>
+</html>
+
+```
+---
+
 ## 6️⃣ Monitoring & Security
 
 - CloudTrail: Enabled to log all S3 + KMS API calls.

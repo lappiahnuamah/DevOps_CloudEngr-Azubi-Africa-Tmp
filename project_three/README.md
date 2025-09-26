@@ -150,7 +150,7 @@ sudo apt update && sudo apt upgrade -y
 ```
 #### Clone the Repository
 ```bash
-git clone https://github.com/lappiahnuamah/DevOps_CloudEngr-Azubi-Africa-Tmp/edit/main/project_three.git
+git clone https://github.com/lappiahnuamah/DevOps_CloudEngr-Azubi-Africa-Tmp
 cd DevOps_CloudEngr-Azubi-Africa-Tmp
 ```
 #### Create a Virtual Environment

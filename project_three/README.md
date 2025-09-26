@@ -68,7 +68,7 @@ The repository follows a simple, organized layout:
 ### Step 1: Launch an EC2 Instance
 - Log into the AWS Management Console to setup the EC2 Instance.
 ---
-![EC2-Dashboard](../project_three/images/a.PNG)
+![EC2-Dashboard](../project_three/images/11.PNG)
 ---
 - Search for **EC2  on the search bar**.
 ---
@@ -76,7 +76,7 @@ The repository follows a simple, organized layout:
 ---
 - Click on Launch Instance.
 ---
-![EC2 Search](../project_three/images/1.PNG)
+![EC2 Search](../project_three/images/11.PNG)
 ---
 - Enter the name of your web server
 ---
@@ -118,7 +118,7 @@ The repository follows a simple, organized layout:
 ---
 - Now, copy the public IP Address of your instance
 ---
-![ec2-success](../project_three/images/2.PNG)
+![ec2-success](../project_three/images/2aa.PNG)
 ---
 - Another way to retrieve your IP Address is to use this command
 ```bash
@@ -148,8 +148,17 @@ ssh -i lamp-stack-kp.pem ubuntu@<EC2_PUBLIC_IP>
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
----
-- Create a file called `requirements.txt`
+#### Clone the Repository
+```bash
+git clone https://github.com/lappiahnuamah/DevOps_CloudEngr-Azubi-Africa-Tmp
+cd DevOps_CloudEngr-Azubi-Africa-Tmp
+```
+#### Create a Virtual Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+#### Create a file called `requirements.txt`
 - Copy and paste these into it
 ```
 Flask==3.0.3
@@ -160,6 +169,18 @@ itsdangerous==2.2.0
 click==8.1.7
 Jinja2==3.1.4
 ```
+#### Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+#### Set Environment Variables
+- Create a `.env` file in the root directory with the following values
+```bash
+AWS_REGION=us-east-2
+BUCKET_NAME=my-secure-uploads-klawbucket
+KMS_KEY_ID=arn:aws:kms:us-east-2:<ACCOUNT_ID>:key/<YOUR_KMS_KEY_ID>
+```
+ - NB: Do not commit `.env` to GitHub (it's already in `.gitignore`) 
 ---
 ## 3️⃣ Role-Based Access Control (RBAC)
 
@@ -272,7 +293,7 @@ def complete():
 
 ```
 ## 5️⃣ Frontend Code
-`static/upload.js`
+Place your `upload.js` in `static/` and create a simple HTML file to load it.
 ```python
 export async function uploadFile(file, key, onProgress) {
   const init = await fetch("/initiate", {
@@ -341,6 +362,39 @@ export async function uploadFile(file, key, onProgress) {
 }
 
 ```
+---
+A simple HTML file to load it.
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Multipart Uploader</title>
+</head>
+<body>
+  <h1>Upload a File</h1>
+  <input type="file" id="fileInput">
+  <progress id="progress" value="0" max="100"></progress>
+
+  <script type="module">
+    import { uploadFile } from "./static/upload.js";
+
+    const fileInput = document.getElementById("fileInput");
+    const progress = document.getElementById("progress");
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files[0];
+      await uploadFile(file, `uploads/${file.name}`, (percent) => {
+        progress.value = percent;
+      });
+      alert("Upload complete!");
+    });
+  </script>
+</body>
+</html>
+
+```
+---
+
 ## 6️⃣ Monitoring & Security
 
 - CloudTrail: Enabled to log all S3 + KMS API calls.
@@ -372,7 +426,33 @@ aws cloudwatch put-metric-alarm \
   --evaluation-periods 1 \
   --alarm-actions arn:aws:sns:us-east-2:067717894834:S3UploadAlerts
 
-
 ```
+### 🔧 Troubleshooting
 
+| Issue                                      | Fix                                                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `IllegalLocationConstraintException`       | Use `--create-bucket-configuration LocationConstraint=us-east-2` when creating bucket |
+| `KMS.NotFoundException`                    | Check your `KMS_KEY_ID` ARN in `.env`                                                 |
+| `AccessDenied` on upload                   | Update IAM policy & KMS key policy to allow `kms:GenerateDataKey`                     |
+| CORS error in browser                      | Add S3 CORS config allowing `PUT, GET, POST`                                          |
+| `externally-managed-environment` pip error | Use virtualenv: `python3 -m venv venv && source venv/bin/activate`                    |
 
+### ✅ Benefits
+
+- Security-first: SSE-KMS, IAM least-privilege, CloudTrail logs.
+- Scalable: 5TB+ uploads supported via multipart upload.
+- Resilient: Resume support prevents re-uploading entire file.
+- Observable: CloudWatch alarms + SNS notify on failure.
+- User-friendly: Progress bar + retries improve UX
+---
+- Here's how the solution looks like
+---
+- Image of while the file is uploading
+![diagram](../project_three/images/1.PNG)
+---
+- Image of the Uploaded file
+![diagram](../project_three/images/2.PNG)
+---
+- Image of the s3 logs
+![diagram](../project_three/images/7.PNG)
+---

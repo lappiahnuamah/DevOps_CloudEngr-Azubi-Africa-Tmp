@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>S3 Multipart Upload Demo</title>
+</head>
+<body>
+  <h2>Upload a File to S3</h2>
+  <input type="file" id="fileInput">
+  <button id="uploadBtn">Upload</button>
+  
+  <br><br>
+<progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
+  <p id="status"></p>
+
+  <script type="module">
+    import { uploadFile } from "/static/upload.js";
+    
+    const progressBar = document.getElementById("progressBar");
+    const status = document.getElementById("status");
+
+    document.getElementById("uploadBtn").addEventListener("click", async () => {
+      const fileInput = document.getElementById("fileInput");
+      if (!fileInput.files.length) {
+        alert("Please select a file first!");
+        return;
+      }
+      const file = fileInput.files[0];
+      status.textContent = `Uploading ${file.name} ...`;
+      progressBar.value=0;
+      try {
+	await uploadFile(file, `uploads/${file.name}`, (percent) => {
+	progressBar.value = percent;
+	status.textContent = `Uploading.... ${percent}%`;
+	});
+        status.textContent = "✅ Upload completed successfully!";
+      } catch (err) {
+        status.textContent = `❌ Upload failed: ${err}`;
+      }
+    });
+  </script>
+</body>
+</html>
+

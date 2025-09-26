@@ -1,0 +1,91 @@
+# ============================
+# Python
+# ============================
+project_three/__pycache__/
+project_three/*.pyc
+project_three/*.pyo
+project_three/*.pyd
+project_three/*.env
+project_three/.env
+project_three/venv/
+project_three/.env.*
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+.env.*
+venv/
+
+
+# ============================
+# Flask / Backend
+# ============================
+project_three/instance/
+project_three/*.db
+*.sqlite
+*.sqlite3
+*.db
+instance/
+
+# ============================
+# Logs / Temp Files
+# ============================
+*.log
+*.tmp
+*.swp
+*.bak
+logs/
+cache/
+*.pid
+project_three/*.log
+project_three/*.tmp
+project_three/*.swp
+project_three/*.bak
+project_three/logs
+project_three/cache/
+
+
+
+
+# ============================
+# Frontend / Node
+# ============================
+node_modules/
+dist/
+build/
+*.lock
+package-lock.json
+yarn.lock
+
+# ============================
+# Operating System Files
+# ============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ============================
+# IDE / Editor Config
+# ============================
+.vscode/
+.idea/
+*.iml
+
+# ============================
+# Generated / Large Files
+# ============================
+*.bin
+*.gz
+*.zip
+*.tar
+*.tgz
+*.7z
+*.mp4
+*.mov
+*.mkv
+*.pth
+*.h5
+

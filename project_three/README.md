@@ -30,6 +30,7 @@ The goal was to design a **security-first, fault-tolerant file upload system** w
 ## 📂 Project Structure
 
 The repository follows a simple, organized layout:
+```
 .
 ├── app.py # Flask backend (handles initiate, presign, complete)
 ├── requirements.txt # Python dependencies
@@ -41,6 +42,7 @@ The repository follows a simple, organized layout:
 │ └── index.html # Simple upload page
 ├── logs/ # (Optional) Local logs directory
 └── README.md # Project documentation
+```
 
 - **`app.py`** → Main Flask application
 - **`static/upload.js`** → Handles chunking, presigned URLs, progress tracking

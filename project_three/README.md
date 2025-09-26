@@ -148,8 +148,17 @@ ssh -i lamp-stack-kp.pem ubuntu@<EC2_PUBLIC_IP>
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
----
-- Create a file called `requirements.txt`
+#### Clone the Repository
+```bash
+git clone https://github.com/lappiahnuamah/DevOps_CloudEngr-Azubi-Africa-Tmp/edit/main/project_three.git
+cd DevOps_CloudEngr-Azubi-Africa-Tmp
+```
+#### Create a Virtual Environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+#### Create a file called `requirements.txt`
 - Copy and paste these into it
 ```
 Flask==3.0.3
@@ -160,6 +169,18 @@ itsdangerous==2.2.0
 click==8.1.7
 Jinja2==3.1.4
 ```
+#### Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+#### Set Environment Variables
+- Create a `.env` file in the root directory with the following values
+```bash
+AWS_REGION=us-east-2
+BUCKET_NAME=my-secure-uploads-klawbucket
+KMS_KEY_ID=arn:aws:kms:us-east-2:<ACCOUNT_ID>:key/<YOUR_KMS_KEY_ID>
+```
+ - NB: Do not commit `.env` to GitHub (it's already in `.gitignore`) 
 ---
 ## 3️⃣ Role-Based Access Control (RBAC)
 
